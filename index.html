@@ -419,7 +419,7 @@ document.querySelectorAll('button, input, a').forEach(el => {
 });
 
 /* ── WAITLIST ── */
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
   const email = document.getElementById('emailInput').value;
   document.getElementById('formWrap').style.display = 'none';
@@ -435,6 +435,9 @@ function handleSubmit(e) {
       },
       body: JSON.stringify({ email_address: email })
     });
+  } catch (err) {
+    console.error('Buttondown error:', err);
+  }
 }
 </script>
 </body>
