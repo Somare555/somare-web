@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOMARE</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap');
+
+:root {
+  --navy: #05080f;
+  --orange: #e8720c;
+  --orange-warm: #f0900a;
+  --text: #f0ebe3;
+  --muted: rgba(240,235,227,0.42);
+  --dim: rgba(240,235,227,0.18);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+body {
+  background: var(--navy);
+  color: var(--text);
+  cursor: none;
+  font-family: 'Cormorant Garamond', serif;
+}
+
+/* ── CUSTOM CURSOR ── */
+.cursor {
+  position: fixed;
+  width: 7px; height: 7px;
+  background: var(--orange);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  transition: width 0.25s, height 0.25s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 34px; height: 34px;
+  border: 1px solid rgba(232,114,12,0.35);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+}
+
+/* ── GRAIN ── */
+.grain {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 100;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+/* ── CANVAS GRADIENT (behind everything) ── */
+canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 32px;
+  z-index: 10;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 20;
+  padding: 32px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: var(--dim);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nav-right {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* ── SOMARE wordmark ── */
+.wordmark {
+  font-family: 'Beau Rivage', cursive;
+  font-size: clamp(100px, 18vw, 220px);
+  font-weight: 400;
+  color: var(--text);
+  line-height: 0.85;
+  letter-spacing: 0.02em;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: riseIn 1.4s 0.1s cubic-bezier(0.16,1,0.3,1) both;
+  text-shadow:
+    0 0 120px rgba(232,114,12,0.15),
+    0 2px 40px rgba(0,0,0,0.4);
+}
+
+/* ── TAGLINE ── */
+.tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(15px, 2vw, 22px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 52px;
+  max-width: 520px;
+  line-height: 1.5;
+  opacity: 0;
+  animation: riseIn 1.2s 0.45s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+/* ── WAITLIST FORM ── */
+.form-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  animation: riseIn 1.2s 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.waitlist-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(232,114,12,0.22);
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(5,8,15,0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.waitlist-input {
+  background: transparent;
+  border: none;
+  padding: 14px 20px;
+  color: var(--text);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  outline: none;
+  width: 240px;
+  letter-spacing: 0.03em;
+}
+
+.waitlist-input::placeholder {
+  color: var(--dim);
+}
+
+.waitlist-btn {
+  background: transparent;
+  border: none;
+  border-left: 1px solid rgba(232,114,12,0.18);
+  padding: 14px 22px;
+  color: var(--orange);
+  font-family: 'Beau Rivage', cursive;
+  font-size: 22px;
+  letter-spacing: 0.04em;
+  cursor: none;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.waitlist-btn:hover {
+  background: rgba(232,114,12,0.08);
+  color: var(--orange-warm);
+}
+
+.success-msg {
+  display: none;
+  font-family: 'Beau Rivage', cursive;
+  font-size: 36px;
+  color: var(--orange-warm);
+  letter-spacing: 0.04em;
+}
+
+
+
+/* ── FOOTER PIN ── */
+.footer-pin {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--dim);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: riseIn 1s 1.1s ease both;
+  white-space: nowrap;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* mobile */
+@media (max-width: 480px) {
+  nav { padding: 20px 24px; }
+  .waitlist-input { width: 180px; }
+  .wordmark { margin-bottom: 20px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grain"></div>
+
+<!-- animated gradient canvas -->
+<canvas id="gradientCanvas"></canvas>
+
+<nav>
+  <span class="nav-logo">Somare</span>
+  <span class="nav-right">somare.app</span>
+</nav>
+
+<section class="hero">
+  <h1 class="wordmark">Somare</h1>
+
+  <p class="tagline">
+    the call to action your nervous system<br>has been searching for
+  </p>
+
+  <div class="form-wrap" id="formWrap">
+    <form class="waitlist-row" onsubmit="handleSubmit(event)">
+      <input
+        class="waitlist-input"
+        type="email"
+        id="emailInput"
+        placeholder="your@email.com"
+        required
+      />
+      <button class="waitlist-btn" type="submit">Join the waitlist</button>
+    </form>
+
+  </div>
+  <p class="success-msg" id="successMsg">You're in. 🌊</p>
+</section>
+
+<p class="footer-pin">align your mind, body &amp; spirit</p>
+
+<script>
+/* ── INTERACTIVE GRADIENT CANVAS ── */
+const canvas = document.getElementById('gradientCanvas');
+const ctx = canvas.getContext('2d');
+
+let W, H;
+let mouse = { x: 0.5, y: 0.5 };
+let target = { x: 0.5, y: 0.5 };
+let current = { x: 0.5, y: 0.5 };
+let t = 0;
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+window.addEventListener('mousemove', e => {
+  target.x = e.clientX / W;
+  target.y = e.clientY / H;
+});
+
+// touch support
+window.addEventListener('touchmove', e => {
+  target.x = e.touches[0].clientX / W;
+  target.y = e.touches[0].clientY / H;
+}, { passive: true });
+
+function lerp(a, b, n) { return a + (b - a) * n; }
+
+function draw() {
+  t += 0.004;
+
+  // smooth mouse follow
+  current.x = lerp(current.x, target.x, 0.04);
+  current.y = lerp(current.y, target.y, 0.04);
+
+  // autonomous drift when no mouse
+  const autoX = 0.5 + Math.sin(t * 0.7) * 0.28;
+  const autoY = 0.5 + Math.cos(t * 0.5) * 0.22;
+
+  const mx = lerp(autoX, current.x, 0.6);
+  const my = lerp(autoY, current.y, 0.6);
+
+  // deep navy base
+  ctx.fillStyle = '#05080f';
+  ctx.fillRect(0, 0, W, H);
+
+  // ── ORANGE BLOB — follows mouse ──
+  const ox = mx * W;
+  const oy = my * H;
+  const og = ctx.createRadialGradient(ox, oy, 0, ox, oy, W * 0.55);
+  og.addColorStop(0,   'rgba(232, 114, 12, 0.72)');
+  og.addColorStop(0.3, 'rgba(200, 80, 8, 0.38)');
+  og.addColorStop(0.6, 'rgba(140, 40, 4, 0.12)');
+  og.addColorStop(1,   'rgba(5, 8, 15, 0)');
+  ctx.fillStyle = og;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── BLUE BLOB — counter-moves ──
+  const bx = (1 - mx) * W * 0.9 + W * 0.05;
+  const by = (1 - my) * H * 0.9 + H * 0.05;
+  const bg = ctx.createRadialGradient(bx, by, 0, bx, by, W * 0.6);
+  bg.addColorStop(0,   'rgba(14, 60, 120, 0.85)');
+  bg.addColorStop(0.3, 'rgba(10, 40, 90, 0.5)');
+  bg.addColorStop(0.7, 'rgba(6, 20, 50, 0.18)');
+  bg.addColorStop(1,   'rgba(5, 8, 15, 0)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── SECONDARY ORANGE GLOW — drifts independently ──
+  const s2x = W * (0.7 + Math.sin(t * 1.1) * 0.2);
+  const s2y = H * (0.3 + Math.cos(t * 0.8) * 0.18);
+  const sg2 = ctx.createRadialGradient(s2x, s2y, 0, s2x, s2y, W * 0.3);
+  sg2.addColorStop(0,   'rgba(240, 130, 20, 0.35)');
+  sg2.addColorStop(0.5, 'rgba(180, 70, 8, 0.1)');
+  sg2.addColorStop(1,   'rgba(5, 8, 15, 0)');
+  ctx.fillStyle = sg2;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── DEEP BLUE POOL — bottom left ──
+  const dpx = W * (0.15 + Math.sin(t * 0.6) * 0.08);
+  const dpy = H * (0.75 + Math.cos(t * 0.9) * 0.1);
+  const dpg = ctx.createRadialGradient(dpx, dpy, 0, dpx, dpy, W * 0.45);
+  dpg.addColorStop(0,   'rgba(8, 45, 110, 0.7)');
+  dpg.addColorStop(0.4, 'rgba(5, 25, 65, 0.3)');
+  dpg.addColorStop(1,   'rgba(5, 8, 15, 0)');
+  ctx.fillStyle = dpg;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── HORIZON EDGE — where orange meets blue ──
+  // thin luminous line at the transition
+  const hg = ctx.createLinearGradient(0, H * my, W, H * (1 - my * 0.3));
+  hg.addColorStop(0,    'rgba(232, 114, 12, 0)');
+  hg.addColorStop(0.45, 'rgba(232, 114, 12, 0.06)');
+  hg.addColorStop(0.5,  'rgba(255, 160, 50, 0.12)');
+  hg.addColorStop(0.55, 'rgba(20, 80, 160, 0.06)');
+  hg.addColorStop(1,    'rgba(14, 60, 120, 0)');
+  ctx.fillStyle = hg;
+  ctx.fillRect(0, 0, W, H);
+
+  // vignette
+  const vg = ctx.createRadialGradient(W/2, H/2, H*0.2, W/2, H/2, H*0.9);
+  vg.addColorStop(0, 'rgba(5,8,15,0)');
+  vg.addColorStop(1, 'rgba(3,5,10,0.65)');
+  ctx.fillStyle = vg;
+  ctx.fillRect(0, 0, W, H);
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ── CUSTOM CURSOR ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx2 = -100, my2 = -100, rx = -100, ry = -100;
+
+document.addEventListener('mousemove', e => {
+  mx2 = e.clientX; my2 = e.clientY;
+  cursor.style.left = mx2 + 'px';
+  cursor.style.top  = my2 + 'px';
+});
+
+(function animRing() {
+  rx += (mx2 - rx) * 0.11;
+  ry += (my2 - ry) * 0.11;
+  ring.style.left = rx + 'px';
+  ring.style.top  = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+document.querySelectorAll('button, input, a').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '13px'; cursor.style.height = '13px';
+    ring.style.width = '50px';  ring.style.height = '50px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '7px';  cursor.style.height = '7px';
+    ring.style.width = '34px';  ring.style.height = '34px';
+  });
+});
+
+/* ── WAITLIST ── */
+function handleSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('emailInput').value;
+  document.getElementById('formWrap').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+  // ↓ paste your Buttondown API key here
+  const BUTTONDOWN_KEY = '5be78bce-1199-4998-9043-df283e51b325';
+  try {
+    await fetch('https://api.buttondown.email/v1/subscribers', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Token ' + BUTTONDOWN_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email_address: email })
+    });
+}
+</script>
+</body>
+</html>
