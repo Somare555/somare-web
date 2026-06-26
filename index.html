@@ -432,16 +432,11 @@ async function handleSubmit(e) {
   const email = document.getElementById('emailInput').value;
   document.getElementById('formWrap').style.display = 'none';
   document.getElementById('successMsg').style.display = 'block';
-  // ↓ paste your Buttondown API key here
-  const BUTTONDOWN_KEY = '5be78bce-1199-4998-9043-df283e51b325';
   try {
-    await fetch('https://api.buttondown.email/v1/subscribers', {
+    await fetch('/api/subscribe', {
       method: 'POST',
-      headers: {
-        'Authorization': 'Token ' + BUTTONDOWN_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email_address: email })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
     });
   } catch (err) {
     console.error('Buttondown error:', err);
