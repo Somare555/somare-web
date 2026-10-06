@@ -216,7 +216,7 @@ nav {
 /* ── FOOTER PIN ── */
 .footer-pin {
   position: fixed;
-  bottom: 28px;
+  bottom: 54px;
   left: 0;
   right: 0;
   text-align: center;
@@ -237,11 +237,39 @@ nav {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── LEGAL FOOTER ── */
+.legal {
+  position: fixed;
+  bottom: 22px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 22px;
+  padding: 0 24px;
+  opacity: 0;
+  animation: riseIn 1s 1.3s ease both;
+}
+.legal a {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.legal a:hover { color: var(--orange); }
+
 /* mobile */
 @media (max-width: 480px) {
   nav { padding: 20px 24px; }
   .waitlist-input { width: 180px; }
   .wordmark { margin-bottom: 20px; }
+  .footer-pin { bottom: 64px; }
+  .legal { gap: 6px 16px; }
 }
 </style>
 </head>
@@ -289,6 +317,12 @@ nav {
 </section>
 
 <p class="footer-pin">align your mind, body &amp; spirit</p>
+
+<footer class="legal">
+  <a href="https://app.notion.com/p/Somare-Privacy-Policy-and-Terms-and-Conditions-3e9ab1cec67d8016886ed2d53ec91921" target="_blank" rel="noopener">Privacy Policy</a>
+  <a href="https://app.notion.com/p/Somare-Consumer-Health-Data-Privacy-Policy-f32840584bdc46068201e30d9dbebfcd" target="_blank" rel="noopener">Consumer Health Data</a>
+  <a href="https://app.notion.com/p/Somare-Privacy-Policy-and-Terms-and-Conditions-3e9ab1cec67d8016886ed2d53ec91921#3ebab1cec67d803099e6eddb3d4a8c93" target="_blank" rel="noopener">Terms</a>
+</footer>
 
 <script>
 /* ── INTERACTIVE GRADIENT CANVAS ── */
