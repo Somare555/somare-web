@@ -216,7 +216,7 @@ nav {
 /* ── FOOTER PIN ── */
 .footer-pin {
   position: fixed;
-  bottom: 54px;
+  bottom: 68px;
   left: 0;
   right: 0;
   text-align: center;
@@ -240,19 +240,22 @@ nav {
 /* ── LEGAL FOOTER ── */
 .legal {
   position: fixed;
-  bottom: 22px;
+  bottom: 18px;
   left: 0;
   right: 0;
   z-index: 20;
+  padding: 0 24px;
+  text-align: center;
+  opacity: 0;
+  animation: riseIn 1s 1.3s ease both;
+}
+.legal-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 6px 22px;
-  padding: 0 24px;
-  opacity: 0;
-  animation: riseIn 1s 1.3s ease both;
 }
-.legal a {
+.legal a, .legal-co {
   font-family: 'DM Mono', monospace;
   font-size: 9px;
   letter-spacing: 0.2em;
@@ -261,6 +264,8 @@ nav {
   text-decoration: none;
   transition: color 0.2s;
 }
+.legal-co { margin-top: 8px; }
+.legal-co a { text-transform: none; letter-spacing: 0.1em; }
 .legal a:hover { color: var(--orange); }
 
 /* mobile */
@@ -268,8 +273,8 @@ nav {
   nav { padding: 20px 24px; }
   .waitlist-input { width: 180px; }
   .wordmark { margin-bottom: 20px; }
-  .footer-pin { bottom: 64px; }
-  .legal { gap: 6px 16px; }
+  .footer-pin { bottom: 78px; }
+  .legal-links { gap: 6px 16px; }
 }
 </style>
 </head>
@@ -319,9 +324,12 @@ nav {
 <p class="footer-pin">align your mind, body &amp; spirit</p>
 
 <footer class="legal">
+  <div class="legal-links">
   <a href="https://app.notion.com/p/Somare-Privacy-Policy-and-Terms-and-Conditions-3e9ab1cec67d8016886ed2d53ec91921" target="_blank" rel="noopener">Privacy Policy</a>
   <a href="https://app.notion.com/p/Somare-Consumer-Health-Data-Privacy-Policy-f32840584bdc46068201e30d9dbebfcd" target="_blank" rel="noopener">Consumer Health Data</a>
   <a href="https://app.notion.com/p/Somare-Privacy-Policy-and-Terms-and-Conditions-3e9ab1cec67d8016886ed2d53ec91921#3ebab1cec67d803099e6eddb3d4a8c93" target="_blank" rel="noopener">Terms</a>
+  </div>
+  <p class="legal-co">&copy; 2026 Somare LLC &middot; <a href="mailto:general@somare.app">general@somare.app</a></p>
 </footer>
 
 <script>
