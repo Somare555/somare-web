@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- Vamáv monogram, "moonlit boat" (Brand Kit v1, page 08). Rendered with headless
+     Chrome to brand/monogram-*.png. ?small=1 draws the heavier waves the kit asks for
+     at small sizes, ?glow=1 adds the ember halo (hero sizes only). -->
+<html><head><link href="https://fonts.googleapis.com/css2?family=Beau+Rivage&display=block" rel="stylesheet"><style>
+html,body{margin:0;width:1024px;height:1024px;overflow:hidden;background:transparent}
+svg{display:block}
+</style></head><body>
+<svg id="m" width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="disc"><circle cx="512" cy="512" r="420"/></clipPath>
+    <radialGradient id="ground" cx="50%" cy="42%" r="60%"><stop offset="0" stop-color="#0a1222"/><stop offset="1" stop-color="#05080f"/></radialGradient>
+    <filter id="halo" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="34"/></filter>
+    <filter id="moonglow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <g id="glow"><circle cx="512" cy="512" r="420" fill="none" stroke="#e8720c" stroke-opacity=".5" stroke-width="40" filter="url(#halo)"/></g>
+  <circle cx="512" cy="512" r="420" fill="url(#ground)"/>
+  <g clip-path="url(#disc)">
+    <!-- the moon: a waxing crescent, tilted -18deg -->
+    <g transform="translate(560 272) rotate(-18)">
+      <path id="moon" d="M0 -40 A40 40 0 1 1 0 40 A22 40 0 1 0 0 -40Z" fill="#e8720c"/>
+    </g>
+    <text x="407" y="648" text-anchor="middle" font-family="Beau Rivage" font-size="420" fill="#f0ebe3">V</text>
+    <!-- water: the V's point dips below the first wave -->
+    <path d="M60 652 C 200 610, 330 610, 470 640 S 760 676, 970 628 L 970 1000 L 60 1000Z" fill="url(#ground)"/>
+    <path class="w1" d="M60 652 C 200 610, 330 610, 470 640 S 760 676, 970 628" fill="none" stroke="#f0ebe3" stroke-linecap="round"/>
+    <path class="w2" d="M60 742 C 230 708, 360 708, 512 728 S 800 756, 970 718" fill="none" stroke="#f0ebe3" stroke-opacity=".5" stroke-linecap="round"/>
+    <path class="w3" d="M60 826 C 230 800, 360 800, 512 814 S 800 836, 970 806" fill="none" stroke="#f0ebe3" stroke-opacity=".24" stroke-linecap="round"/>
+    <!-- the moon's light on the water -->
+    <path class="e" d="M538 690 H 592" stroke="#e8720c" stroke-linecap="round"/>
+    <path class="e" d="M550 776 H 582" stroke="#e8720c" stroke-opacity=".75" stroke-linecap="round"/>
+  </g>
+  <circle cx="512" cy="512" r="418" fill="none" stroke="#e8720c" stroke-opacity=".7" class="ring"/>
+</svg>
+<script>
+const q=new URLSearchParams(location.search), small=q.has('small');
+const W={w1:small?16:7,w2:small?14:6,w3:small?12:5,e:small?16:8,ring:small?18:6};
+for(const k in W)document.querySelectorAll('.'+k).forEach(el=>el.setAttribute('stroke-width',W[k]));
+if(!q.has('glow'))document.getElementById('glow').remove();
+if(q.has('square'))document.body.style.background='#05080f';
+</script>
+</body></html>
