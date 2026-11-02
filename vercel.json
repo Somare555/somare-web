@@ -9,5 +9,29 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "somare.app"
+        }
+      ],
+      "destination": "https://vamav.app/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.somare.app"
+        }
+      ],
+      "destination": "https://vamav.app/:path*",
+      "permanent": true
+    }
   ]
 }
