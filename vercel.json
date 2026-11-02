@@ -32,6 +32,17 @@
       ],
       "destination": "https://vamav.app/:path*",
       "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.vamav.app"
+        }
+      ],
+      "destination": "https://vamav.app/:path*",
+      "permanent": true
     }
   ]
 }
