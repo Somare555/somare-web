@@ -166,6 +166,7 @@
   .partner .lede{margin:0}
 
   /* join */
+  .waitlist-label{display:block;text-align:center;margin:0 0 14px;letter-spacing:.3em;margin-right:-.3em}
   .waitlist-row{display:flex;max-width:420px;margin:0 auto;border:1px solid var(--border);background:var(--card);border-radius:3px}
   .waitlist-input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--text);font-family:"Cormorant Garamond",serif;font-style:italic;font-weight:300;font-size:16px;letter-spacing:.03em;padding:14px 20px}
   .waitlist-input::placeholder{color:var(--muted)}
@@ -213,8 +214,8 @@
   <p class="mono tagline">Wellness intelligence</p>
   <h1>A wellness home that speaks your body's language</h1>
   <div id="formWrap">
+    <label class="mono waitlist-label" for="emailInput">Join the waitlist</label>
     <form class="waitlist-row" onsubmit="handleSubmit(event)">
-      <label for="emailInput" style="position:absolute;left:-9999px">Email</label>
       <input class="waitlist-input" id="emailInput" type="email" placeholder="your@email.com" required autocomplete="email">
       <button class="waitlist-btn" type="submit" aria-label="Join the waitlist">Join</button>
     </form>
